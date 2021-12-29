@@ -45,8 +45,8 @@ const VideoPlayer = (props: VideoPlayerProps) => {
       rate={1.0}
       isMuted={false}
       volume={1.0}
+      shouldPlay
       playsInSilentLockedModeIOS={true}
-      shouldPlay={true}
       onPlaybackStatusUpdate={(status) => setStatus(() => status)}
     />
   );
