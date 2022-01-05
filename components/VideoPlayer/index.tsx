@@ -4,6 +4,7 @@ import { Video } from 'expo-av';
 import { Episode } from '../../types';
 import styles from './styles';
 import { Playback } from 'expo-av/build/AV';
+import { Storage } from 'aws-amplify';
 
 interface VideoPlayerProps {
   episode: Episode;
@@ -11,9 +12,18 @@ interface VideoPlayerProps {
 
 const VideoPlayer = (props: VideoPlayerProps) => {
   const { episode } = props;
+  const [videoURL, setVideoURL] = useState('');
 
   const [status, setStatus] = useState({});
   const video = useRef<Playback>(null);
+
+  useEffect(() => {
+    if (episode.video.startsWith('http')) {
+      setVideoURL(episode.video);
+      return;
+    }
+    Storage.get(episode.video).then(setVideoURL);
+  }, [episode]);
 
   useEffect(() => {
     if (!video) {
@@ -21,11 +31,16 @@ const VideoPlayer = (props: VideoPlayerProps) => {
     }
     (async () => {
       await video?.current?.unloadAsync();
-      await video?.current?.loadAsync({ uri: episode.video }, {}, false);
+      await video?.current?.loadAsync({ uri: videoURL }, {}, false);
     })();
-  }, [episode]);
+  }, [videoURL]);
 
-  console.log(episode);
+  console.log(videoURL);
+
+  if (videoURL === '') {
+    return null;
+  }
+
   return (
     <Video
       ref={video}
@@ -39,13 +54,14 @@ const VideoPlayer = (props: VideoPlayerProps) => {
       posterStyle={{
         resizeMode: 'cover',
       }}
-      usePoster={true}
+      usePoster={false}
       useNativeControls
       resizeMode='contain'
       rate={1.0}
       isMuted={false}
       volume={1.0}
       shouldPlay
+      isLooping
       playsInSilentLockedModeIOS={true}
       onPlaybackStatusUpdate={(status) => setStatus(() => status)}
     />

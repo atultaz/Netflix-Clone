@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "netflix",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/tmp/amplify-a0234931-f869-4a77-9066-422e3a3827b0/amplify/backend/api/netflix/schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authnetflix7b14840d"
+    },
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "keyDescription": "api key description",
+        "expirationTime": 30
+      },
+      {
+        "mode": "AWS_IAM"
+      }
+    ]
+  }
+}
